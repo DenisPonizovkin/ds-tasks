@@ -33,7 +33,7 @@ class Task3:
 
     # Смешивание совокупностей
     def mix(self, xy):
-        portions = [0.9, 0.1]
+        portions = [0.1, 0.9]
         nums = [int(len(xy['x'][i]) * portions[i]) for i in range(0, len(xy['x']))]
         xs = []
         ys = []
@@ -94,22 +94,25 @@ class Task3:
         alpha     = 0.15
         betta     = 0.15
         self._mu0 = 1
-        self._mu1 = 0.5
+        self._mu1 = 10
         self._a0  = 1
-        self._a1  = 0.5
+        self._a1  = 0
 
         data = self.generate(100000)
         step = 0.0001
         card = 0
         n = 100 # число тестов
         for i in range(0, n):
-            likehood = 0
+            lf0 = list()
+            lf1 = list()
             self._c0 = np.log(betta/(1 - alpha))
             self._c1 = np.log((1 - betta)/alpha)
             sample = list()
             while(True):
                 x = data['x'][int(random.randrange(len(data)))]
-                likehood += np.log(self.f1(x)/self.f0(x))
+                lf0.append(self.f0(x))
+                lf1.append(self.f1(x))
+                likehood = np.log(np.prod(lf1)/np.prod(lf0))
                 print(likehood)
                 if (likehood >= self._c1):
                     print("Accept H1:" + str("a0,a1=") + str(self._a0) + "," + str(self._a1)
@@ -127,7 +130,7 @@ class Task3:
 
                 if ((self._c0 < likehood) and (likehood < self._c1)):
                     sample.append(x)
-                    self._c0 += step
-                    self._c1 -= step
+                    # self._c0 += step
+                    # self._c1 -= step
 
         print("card = " + str(card/n))
