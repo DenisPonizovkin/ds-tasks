@@ -4,6 +4,8 @@
 # https://www.coursera.org/lecture/stats-for-data-analysis/znachimost-korrieliatsii-zKGmV
 # http://matstats.ru/kr.html
 # http://statistica.ru/theory/znachimost-koeffitsienta-korrelyatsii-doveritelnyy-interval/
+# https://einsteins.ru/subjects/statistika/teoriya-statistika/ocenka-korrelyacii
+# http://eric.univ-lyon2.fr/~ricco/tanagra/fichiers/en_Tanagra_Calcul_P_Value.pdf
 
 import numpy as np
 from scipy.stats import t
