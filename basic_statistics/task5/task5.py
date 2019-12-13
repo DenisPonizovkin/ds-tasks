@@ -1,5 +1,7 @@
 #
 # https://www.coursera.org/lecture/stats-for-data-analysis/znachimost-korrieliatsii-zKGmV
+# https://habr.com/ru/company/JetBrains-education/blog/438058/
+# https://www.machinelearningmastery.ru/chi-squared-test-for-machine-learning/
 
 import scipy
 from collections import Counter
@@ -71,3 +73,9 @@ class Task5:
             # out += "\nexpected = " + "\n" + str(expected)
             # out += "\n=========================================================="
             # print(out)
+            # prob = 0.95
+            # critical = chi2.ppf(prob, dof)
+            # if abs(stat) >= critical:
+	        #     print('Dependent (reject H0)')
+            # else:
+	        #     print('Independent (fail to reject H0)')
