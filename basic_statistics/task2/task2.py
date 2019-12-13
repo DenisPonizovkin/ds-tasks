@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import random
+import math
 
 class Task2:
     def normal(self, x, mu, sigma):
@@ -35,7 +36,8 @@ class Task2:
 
         if (option == 1):
             mu = 0. # random.random()
-            sigma = 0.5 # random.random()
+            var = 0.5 # random.random()
+            sigma = math.sqrt(var)
             for i in range(0, 3):
                 xs = np.random.normal(mu, sigma, card)
                 ys = self.normal(xs, mu, sigma)
@@ -47,8 +49,9 @@ class Task2:
 
         if (option == 2):
             colors = ['b', 'r', 'g']
-            mu = [0.1, 0.3, 0.9]
-            sigma = 0.5
+            mu = [0.1, 0.5, 0.9]
+            var = 0.7 # random.random()
+            sigma = math.sqrt(var)
             for i in range(0, 3):
                 xs = np.random.normal(mu[i], sigma, card)
                 ys = self.normal(xs, mu[i], sigma)
@@ -62,8 +65,9 @@ class Task2:
 
         if (option == 3):
             colors = ['b', 'r', 'g']
-            mu = [0.1, 0.3, 0.9]
-            sigma = [0.3, 1.7, 0.7]
+            mu = [1, 0.3, 0.8]
+            var = [0.3, 1.7, 0.7]
+            sigma = [math.sqrt(x) for x in var]
             title = "sigma = "
             for i in range(0, 3):
                 xs = np.random.normal(mu[i], sigma[i], card)
@@ -132,7 +136,7 @@ class Task2:
         return float('{:.2f}'.format(np.var(data)))
 
     def run(self):
-        all = self.generate(1,1000)
+        all = self.generate(3,40)
         general = self.mix(all)
         plt.scatter(general['x'], general['y'])
         plt.show()
@@ -143,8 +147,10 @@ class Task2:
             m = 0
             d = 0
             n = 1000
-            if (exp_num > 1):
-                n = 20
+            # if (exp_num == 2):
+            #     n = 100
+            # if (exp_num == 3):
+            #     n = 100
             for i in range(0, n):
                 if (i % 2 == 0):
                     print("==========================> sample " + str(i))
@@ -158,5 +164,6 @@ class Task2:
 
         for i in range(0, len(ms)):
             print("{:.5f}".format(ms[i]))
-            print("{:.5f}".format(ds[i]))
 
+        for i in range(0, len(ms)):
+            print("{:.5f}".format(ds[i]))
