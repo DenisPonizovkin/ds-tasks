@@ -65,7 +65,14 @@ class Task5:
 
             t = self.table(f)
             stat, p, dof, expected = scipy.stats.chi2_contingency(t)
-            print(p)
+            critical = scipy.stats.chi2.ppf(0.95, dof)
+            out = "Sex and " + f
+            if (abs(stat) >= critical):
+                out += " depend: "
+            else:
+                out += " independ: "
+            out += str(stat) + ", " + str(p) + ", " + str(critical)
+            print(out)
             # out = "Results for " + f
             # out += "\nstat = "       + "{:.2f}".format(stat)
             # out += "\np = "        + "{:.2f}".format(p)
