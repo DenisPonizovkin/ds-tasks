@@ -33,8 +33,7 @@ class Task3:
 
     # Смешивание совокупностей
     def mix(self, xy):
-        portions = [0.1, 0.9]
-        nums = [int(len(xy['x'][i]) * portions[i]) for i in range(0, len(xy['x']))]
+        nums = [int(len(xy['x'][i]) * self._portions[i]) for i in range(0, len(xy['x']))]
         xs = []
         ys = []
         for n in range(0, len(xy['x'])):
@@ -69,11 +68,16 @@ class Task3:
     # Значение функции нормального распределения
     def normal(self, x, mu, sigma):
         return ( 2.*np.pi*sigma**2. )**-.5 * np.exp( -.5 * (x-mu)**2. / sigma**2. )
+
+    # свободный член, независящий от x, Который добавляется к краям c0, c1
+    # следует из фморлу Log(f1/f0), где fi - это нормальное распределение
+    def add_coef(self, mu0, mu1, sigma):
+        return (mu0**2 - mu1**2)/sigma**2
     # ------------------------------------------------------------------------------
     def __init__(self):
         self._c0 = None
         self._c1 = None
-        self._sigma = 0.5
+        self._sigma = 1
 
     def run(self):
         # По теории говорится, что если alpha, betta заданы, то
@@ -91,28 +95,33 @@ class Task3:
         # c0 = betta'/(1 - alpha')
         # c1 = (1 - betta')/alpha'
         # Так как штрих символа нет, то использую имена переменных без штриха в оде.
-        alpha     = 0.15
-        betta     = 0.15
+        alpha     = 0.9
+        betta     = 0.1
+        # мат ожидания смесей
         self._mu0 = 1
-        self._mu1 = 10
+        self._mu1 = 100
+        self._portions = [0.9, 0.1]
+
+        # для гипотез
         self._a0  = 1
-        self._a1  = 0
+        self._a1  = 100
 
         data = self.generate(100000)
         step = 0.0001
         card = 0
-        n = 100 # число тестов
+        n = 10 # число тестов
         for i in range(0, n):
-            lf0 = list()
-            lf1 = list()
-            self._c0 = np.log(betta/(1 - alpha))
-            self._c1 = np.log((1 - betta)/alpha)
+            lfs = list()
+            self._c0 = -10000
+            self._c1 = 10000
             sample = list()
             while(True):
                 x = data['x'][int(random.randrange(len(data)))]
-                lf0.append(self.f0(x))
-                lf1.append(self.f1(x))
-                likehood = np.log(np.prod(lf1)/np.prod(lf0))
+                v = x * (self._a1 - self._a0)/self._sigma**2
+                lfs.append(v)
+                log = np.log(np.prod(lfs))
+                print(log)
+                likehood = log + len(lfs) * self.add_coef(self._a0, self._a1, self._sigma)
                 print(likehood)
                 if (likehood >= self._c1):
                     print("Accept H1:" + str("a0,a1=") + str(self._a0) + "," + str(self._a1)
@@ -130,7 +139,8 @@ class Task3:
 
                 if ((self._c0 < likehood) and (likehood < self._c1)):
                     sample.append(x)
-                    # self._c0 += step
-                    # self._c1 -= step
+                    step = self.add_coef(self._a0, self._a1, self._sigma)
+                    self._c0 += step
+                    self._c1 -= step
 
         print("card = " + str(card/n))
