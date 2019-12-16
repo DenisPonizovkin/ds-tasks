@@ -22,9 +22,9 @@ class Task4:
                 data = ftrs.split("\t")
 
                 # Для разбиения выборки на два типа по полу
-                # if (data[0] == 'Male'):
-                #     ftrs = fp.readline()
-                #     continue
+                if (data[0] != 'Male'):
+                    ftrs = fp.readline()
+                    continue
 
                 data = list(map(lambda s: float(s), data[1:]))
                 is_undefined_value = False
@@ -65,7 +65,7 @@ class Task4:
     # Критическое значение, которое берется из распределения Стьюдента.
     # С ним сравниваем значение коэффициента корреляции
     def critical_t(self, tv, k):
-        return t.sf(tv, k)
+        return t.isf(0.025, k) # 0.025 = (1 - 0.95) / 2, делим, так как симметрия
 
     def check(self, name, data, weights):
         k = len(weights) - 2 # Для вычисляемой статистики мощность равна n - 2
@@ -83,7 +83,6 @@ class Task4:
     # H1 -> corr != 0
     # Если нулевая гипотеза справедлива, то статистика имеет распределение Стьюдента
     def run(self):
-        k = len(self._w) - 2 # Для вычисляемой статистики мощность равна n - 2
         self.check("FSIQ", self._fsiq, self._w)
         self.check("PIQ", self._piq, self._w)
         self.check("VIQ", self._viq, self._w)
